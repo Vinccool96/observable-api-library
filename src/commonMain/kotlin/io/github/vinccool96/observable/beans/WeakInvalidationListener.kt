@@ -30,6 +30,10 @@ class WeakInvalidationListener : InvalidationListener, WeakListener {
         this.ref = CoreWeakRefFactory.createWeakRef(listener)
     }
 
+    override fun clear() {
+        this.ref.clear()
+    }
+
     override fun invalidated(observable: Observable) {
         val listener = this.ref.get()
         if (listener != null) {
