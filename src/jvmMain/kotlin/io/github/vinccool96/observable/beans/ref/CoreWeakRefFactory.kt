@@ -10,10 +10,14 @@ actual object CoreWeakRefFactory {
 
     private class JVMCoreWeakRef<T>(referent: T) : CoreWeakRef<T> {
 
-        private val ref = WeakReference(referent)
+        private var ref: WeakReference<T>? = WeakReference(referent)
 
         override fun get(): T? {
-            return this.ref.get()
+            return this.ref?.get()
+        }
+
+        override fun clear() {
+            this.ref = null
         }
 
     }

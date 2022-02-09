@@ -8,12 +8,16 @@ actual object CoreWeakRefFactory {
         return NativeCoreWeakRef(referent)
     }
 
-    private class NativeCoreWeakRef<T>(referent: T) : CoreWeakRef<T> {
+    class NativeCoreWeakRef<T>(referent: T) : CoreWeakRef<T> {
 
         private val ref = WeakReference(referent as Any)
 
         override fun get(): T? {
             return this.ref.get() as T?
+        }
+
+        override fun clear() {
+            this.ref.clear()
         }
 
     }
