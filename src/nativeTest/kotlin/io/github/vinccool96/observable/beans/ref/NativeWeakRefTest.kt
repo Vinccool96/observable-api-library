@@ -4,6 +4,7 @@ import kotlin.native.internal.GC
 import kotlin.test.Test
 import kotlin.test.assertNull
 
+@Suppress("UNUSED_VALUE")
 class NativeWeakRefTest {
 
     private lateinit var ref: CoreWeakRef<Any?>
