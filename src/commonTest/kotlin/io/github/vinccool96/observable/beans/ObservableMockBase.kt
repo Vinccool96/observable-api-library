@@ -3,7 +3,7 @@ package io.github.vinccool96.observable.beans
 import io.github.vinccool96.observable.beans.value.ChangeListener
 import io.github.vinccool96.observable.beans.value.ObservableValue
 
-abstract class BaseObservableMock : ObservableValue<Any?> {
+abstract class ObservableMockBase : ObservableValue<Any?> {
 
     var removeCounter: Int = 0
 

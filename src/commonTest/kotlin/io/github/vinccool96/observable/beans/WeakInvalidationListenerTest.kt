@@ -26,7 +26,7 @@ class WeakInvalidationListenerTest {
         assertEquals(1, o.removeCounter)
     }
 
-    private class ObservableMock : BaseObservableMock() {
+    private class ObservableMock : ObservableMockBase() {
 
         override fun removeListener(listener: InvalidationListener) {
             this.removeCounter++

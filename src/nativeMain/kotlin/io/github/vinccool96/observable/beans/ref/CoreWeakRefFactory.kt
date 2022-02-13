@@ -12,6 +12,7 @@ actual object CoreWeakRefFactory {
 
         private val ref = WeakReference(referent as Any)
 
+        @Suppress("UNCHECKED_CAST")
         override fun get(): T? {
             return this.ref.get() as T?
         }
