@@ -42,6 +42,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
                 implementation("io.github.vinccool96.uncaught:uncaught-exception-handling:1.0")
+                implementation("io.github.vinccool96.ref:weak-references:1.0")
             }
         }
         val commonTest by getting {

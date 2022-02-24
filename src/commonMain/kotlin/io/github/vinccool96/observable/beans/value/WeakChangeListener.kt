@@ -1,8 +1,8 @@
 package io.github.vinccool96.observable.beans.value
 
 import io.github.vinccool96.observable.beans.WeakListener
-import io.github.vinccool96.observable.beans.ref.CoreWeakRef
-import io.github.vinccool96.observable.beans.ref.CoreWeakRefFactory
+import io.github.vinccool96.ref.WeakReference
+import io.github.vinccool96.ref.WeakReferenceFactory
 
 /**
  * A `WeakChangeListener` can be used, if an [ObservableValue] should only maintain a weak reference to the listener.
@@ -25,7 +25,7 @@ import io.github.vinccool96.observable.beans.ref.CoreWeakRefFactory
  */
 class WeakChangeListener<T>(listener: ChangeListener<T>) : ChangeListener<T>, WeakListener {
 
-    private val ref: CoreWeakRef<ChangeListener<T>> = CoreWeakRefFactory.createWeakRef(listener)
+    private val ref: WeakReference<ChangeListener<T>> = WeakReferenceFactory.createWeakRef(listener)
 
     override val wasGarbageCollected: Boolean
         get() = this.ref.get() == null

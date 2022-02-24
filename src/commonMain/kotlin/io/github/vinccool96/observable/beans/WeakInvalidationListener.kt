@@ -1,7 +1,7 @@
 package io.github.vinccool96.observable.beans
 
-import io.github.vinccool96.observable.beans.ref.CoreWeakRef
-import io.github.vinccool96.observable.beans.ref.CoreWeakRefFactory
+import io.github.vinccool96.ref.WeakReference
+import io.github.vinccool96.ref.WeakReferenceFactory
 
 /**
  * A `WeakInvalidationListener` can be used, if an [Observable] should only maintain a weak reference to the listener.
@@ -18,7 +18,7 @@ import io.github.vinccool96.observable.beans.ref.CoreWeakRefFactory
  */
 class WeakInvalidationListener : InvalidationListener, WeakListener {
 
-    private val ref: CoreWeakRef<InvalidationListener>
+    private val ref: WeakReference<InvalidationListener>
 
     /**
      * The constructor of `WeakInvalidationListener`.
@@ -27,7 +27,7 @@ class WeakInvalidationListener : InvalidationListener, WeakListener {
      */
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(@NamedArg("listener") listener: InvalidationListener) {
-        this.ref = CoreWeakRefFactory.createWeakRef(listener)
+        this.ref = WeakReferenceFactory.createWeakRef(listener)
     }
 
     override fun clear() {
