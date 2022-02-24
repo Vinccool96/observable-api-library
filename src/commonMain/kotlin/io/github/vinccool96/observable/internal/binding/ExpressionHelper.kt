@@ -3,8 +3,8 @@ package io.github.vinccool96.observable.internal.binding
 import io.github.vinccool96.observable.beans.InvalidationListener
 import io.github.vinccool96.observable.beans.value.ChangeListener
 import io.github.vinccool96.observable.beans.value.ObservableValue
-import io.github.vinccool96.observable.internal.exception.ExceptionHandler
 import io.github.vinccool96.observable.internal.utils.ArrayUtils
+import io.github.vinccool96.uncaught.UncaughtExceptionHandler
 
 internal abstract class ExpressionHelper<T>(protected val observable: ObservableValue<T>) : ExpressionHelperBase() {
 
@@ -45,7 +45,7 @@ internal abstract class ExpressionHelper<T>(protected val observable: Observable
             try {
                 this.listener.invalidated(this.observable)
             } catch (e: Exception) {
-                ExceptionHandler.handleUncaughtException(e)
+                UncaughtExceptionHandler.threadProperties.handler.uncaughtException(e)
             }
         }
 
@@ -86,7 +86,7 @@ internal abstract class ExpressionHelper<T>(protected val observable: Observable
                 try {
                     this.listener.changed(this.observable, oldValue, this.currentValue)
                 } catch (e: Exception) {
-                    ExceptionHandler.handleUncaughtException(e)
+                    UncaughtExceptionHandler.threadProperties.handler.uncaughtException(e)
                 }
             }
         }
@@ -267,7 +267,7 @@ internal abstract class ExpressionHelper<T>(protected val observable: Observable
                     try {
                         curInvalidationList[i]!!.invalidated(this.observable)
                     } catch (e: Exception) {
-                        ExceptionHandler.handleUncaughtException(e)
+                        UncaughtExceptionHandler.threadProperties.handler.uncaughtException(e)
                     }
                 }
                 if (curChangeSize > 0) {
@@ -279,7 +279,7 @@ internal abstract class ExpressionHelper<T>(protected val observable: Observable
                             try {
                                 curChangeList[i]!!.changed(this.observable, oldValue, this.currentValue)
                             } catch (e: Exception) {
-                                ExceptionHandler.handleUncaughtException(e)
+                                UncaughtExceptionHandler.threadProperties.handler.uncaughtException(e)
                             }
                         }
                     }

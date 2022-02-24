@@ -199,3 +199,5 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 /ObservableApiKt.iml
+
+/kotlin-js-store

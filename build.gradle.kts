@@ -41,6 +41,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+                implementation("io.github.vinccool96.uncaught:uncaught-exception-handling:1.0")
             }
         }
         val commonTest by getting {
@@ -53,9 +54,15 @@ kotlin {
             }
         }
         val jvmTest by getting
-        val jsMain by getting
+        val jsMain by getting {
+            dependencies {
+            }
+        }
         val jsTest by getting
-        val nativeMain by getting
+        val nativeMain by getting {
+            dependencies {
+            }
+        }
         val nativeTest by getting
     }
 }
