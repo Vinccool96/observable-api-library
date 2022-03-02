@@ -5,7 +5,7 @@ plugins {
 group = "io.github.vinccool96.observable"
 version = "1.0-SNAPSHOT"
 
-val kotlinVersion = "1.6.20-M1"
+val kotlinVersion = "1.6.20-RC"
 
 repositories {
     mavenCentral()
@@ -43,26 +43,25 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
                 implementation("io.github.vinccool96.uncaught:uncaught-exception-handling:1.0")
                 implementation("io.github.vinccool96.ref:weak-references:1.0")
+                implementation("io.github.vinccool96.logging:logging:1.2")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(kotlin("test-annotations-common"))
             }
         }
         val jvmMain by getting {
-            dependencies {
-            }
+            dependencies {}
         }
         val jvmTest by getting
         val jsMain by getting {
-            dependencies {
-            }
+            dependencies {}
         }
         val jsTest by getting
         val nativeMain by getting {
-            dependencies {
-            }
+            dependencies {}
         }
         val nativeTest by getting
     }
