@@ -182,10 +182,8 @@ internal abstract class ExpressionHelper<T>(protected val observable: Observable
                             oldListeners.copyInto(this.invalidationListenerArray, 0, 0, index + 1)
                         }
                         if (numMoved > 0) {
-                            oldListeners.copyInto(
-                                    this.invalidationListenerArray, index, index + 1,
-                                    this.invalidationSize
-                            )
+                            oldListeners.copyInto(this.invalidationListenerArray, index, index + 1,
+                                    this.invalidationSize)
                         }
                         this.invalidationSize--
                         if (!this.locked) {
@@ -239,10 +237,7 @@ internal abstract class ExpressionHelper<T>(protected val observable: Observable
                             oldListeners.copyInto(this.changeListenerArray, 0, 0, index + 1)
                         }
                         if (numMoved > 0) {
-                            oldListeners.copyInto(
-                                    this.changeListenerArray, index, index + 1,
-                                    this.changeSize
-                            )
+                            oldListeners.copyInto(this.changeListenerArray, index, index + 1, this.changeSize)
                         }
                         this.changeSize--
                         if (!this.locked) {

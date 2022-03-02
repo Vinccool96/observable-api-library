@@ -23,14 +23,12 @@ class ExpressionHelperTest {
     fun setUp() {
         this.helper = null
         this.observable = ObservableObjectValueStub(DATA_1)
-        this.invalidationListeners = arrayOf(
-                InvalidationListenerMock(), InvalidationListenerMock(),
-                InvalidationListenerMock(), InvalidationListenerMock()
-        )
-        this.changeListeners = arrayOf(
-                ChangeListenerMock(UNDEFINED), ChangeListenerMock(UNDEFINED),
-                ChangeListenerMock(UNDEFINED), ChangeListenerMock(UNDEFINED)
-        )
+        this.invalidationListeners =
+                arrayOf(InvalidationListenerMock(), InvalidationListenerMock(), InvalidationListenerMock(),
+                        InvalidationListenerMock())
+        this.changeListeners =
+                arrayOf(ChangeListenerMock(UNDEFINED), ChangeListenerMock(UNDEFINED), ChangeListenerMock(UNDEFINED),
+                        ChangeListenerMock(UNDEFINED))
     }
 
     @Test
@@ -199,11 +197,9 @@ class ExpressionHelperTest {
 
             override fun changed(observable: ObservableValue<out Any>, oldValue: Any, newValue: Any) {
                 if (this.index < this@ExpressionHelperTest.invalidationListeners.size) {
-                    this@ExpressionHelperTest.helper = ExpressionHelper.addListener(
-                            this@ExpressionHelperTest.helper,
+                    this@ExpressionHelperTest.helper = ExpressionHelper.addListener(this@ExpressionHelperTest.helper,
                             this@ExpressionHelperTest.observable,
-                            this@ExpressionHelperTest.invalidationListeners[this.index++]
-                    )
+                            this@ExpressionHelperTest.invalidationListeners[this.index++])
                 }
             }
 
@@ -249,10 +245,8 @@ class ExpressionHelperTest {
 
             override fun changed(observable: ObservableValue<out Any>, oldValue: Any, newValue: Any) {
                 if (this.index < this@ExpressionHelperTest.invalidationListeners.size) {
-                    this@ExpressionHelperTest.helper = ExpressionHelper.removeListener(
-                            this@ExpressionHelperTest.helper,
-                            this@ExpressionHelperTest.invalidationListeners[this.index++]
-                    )
+                    this@ExpressionHelperTest.helper = ExpressionHelper.removeListener(this@ExpressionHelperTest.helper,
+                            this@ExpressionHelperTest.invalidationListeners[this.index++])
                 }
             }
 
@@ -361,11 +355,9 @@ class ExpressionHelperTest {
 
             override fun changed(observable: ObservableValue<out Any>, oldValue: Any, newValue: Any) {
                 if (this.index < this@ExpressionHelperTest.changeListeners.size) {
-                    this@ExpressionHelperTest.helper = ExpressionHelper.addListener(
-                            this@ExpressionHelperTest.helper,
+                    this@ExpressionHelperTest.helper = ExpressionHelper.addListener(this@ExpressionHelperTest.helper,
                             this@ExpressionHelperTest.observable,
-                            this@ExpressionHelperTest.changeListeners[this.index++]
-                    )
+                            this@ExpressionHelperTest.changeListeners[this.index++])
                 }
             }
 
@@ -411,10 +403,8 @@ class ExpressionHelperTest {
 
             override fun changed(observable: ObservableValue<out Any>, oldValue: Any, newValue: Any) {
                 if (this.index < this@ExpressionHelperTest.changeListeners.size) {
-                    this@ExpressionHelperTest.helper = ExpressionHelper.removeListener(
-                            this@ExpressionHelperTest.helper,
-                            this@ExpressionHelperTest.changeListeners[this.index++]
-                    )
+                    this@ExpressionHelperTest.helper = ExpressionHelper.removeListener(this@ExpressionHelperTest.helper,
+                            this@ExpressionHelperTest.changeListeners[this.index++])
                 }
             }
 
