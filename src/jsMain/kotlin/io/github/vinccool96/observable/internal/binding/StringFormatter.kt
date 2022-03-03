@@ -7,7 +7,6 @@ import io.github.vinccool96.observable.beans.value.ObservableValue
 import io.github.vinccool96.observable.collections.ObservableCollections
 import io.github.vinccool96.observable.collections.ObservableList
 import io.github.vinccool96.observable.dev.ReturnsUnmodifiableCollection
-import io.github.vinccool96.observable.internal.utils.ArrayUtils
 
 @Suppress("UNCHECKED_CAST")
 internal actual abstract class StringFormatter : StringBinding() {
@@ -63,15 +62,6 @@ internal actual abstract class StringFormatter : StringBinding() {
 
         internal fun extractValue(obj: Any): Any? {
             return if (ObservableValue::class.isInstance(obj)) (obj as ObservableValue<*>).value else obj
-        }
-
-        fun extractValues(objs: Array<Any>): Array<Any> {
-            val n: Int = objs.size
-            val values: Array<Any?> = arrayOfNulls(n)
-            for (i in 0 until n) {
-                values[i] = extractValue(objs[i])
-            }
-            return ArrayUtils.copyOfNotNulls(values)
         }
 
         actual fun extractDependencies(vararg args: Any?): Array<ObservableValue<*>> {

@@ -31,7 +31,8 @@ import java.util.*
  *
  * @throws IllegalArgumentException if both properties are equal
  */
-fun <T> Bindings.bindBidirectional(stringProperty: Property<String?>, otherProperty: Property<T>, format: Format) {
+fun <T> Bindings.bindBidirectionalFormat(stringProperty: Property<String?>, otherProperty: Property<T>,
+        format: Format) {
     BidirectionalBinding.bind(stringProperty, otherProperty, format)
 }
 
