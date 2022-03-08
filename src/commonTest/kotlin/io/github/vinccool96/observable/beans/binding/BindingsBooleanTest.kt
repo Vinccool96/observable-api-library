@@ -33,25 +33,25 @@ class BindingsBooleanTest {
         assertEquals(true && false, binding.get())
         DependencyUtils.checkDependencies(binding.dependencies, this.op1, this.op2)
 
-//        // change first operand
-//        this.observer.reset()
-//        this.op1.set(false)
-//        assertEquals(false && false, binding.get())
-//        this.observer.check(binding, 1)
-//
-//        // change second operand
-//        this.op1.set(true) // avoid short-circuit invalidation
-//        binding.get()
-//        this.observer.reset()
-//        this.op2.set(true)
-//        assertEquals(true && true, binding.get())
-//        this.observer.check(binding, 1)
-//
-//        // last possibility
-//        this.op1.set(false)
-//        assertEquals(false && true, binding.get())
-//        this.observer.check(binding, 1)
-//        binding.dispose()
+        // change first operand
+        this.observer.reset()
+        this.op1.set(false)
+        assertEquals(false && false, binding.get())
+        this.observer.check(binding, 1)
+
+        // change second operand
+        this.op1.set(true) // avoid short-circuit invalidation
+        binding.get()
+        this.observer.reset()
+        this.op2.set(true)
+        assertEquals(true && true, binding.get())
+        this.observer.check(binding, 1)
+
+        // last possibility
+        this.op1.set(false)
+        assertEquals(false && true, binding.get())
+        this.observer.check(binding, 1)
+        binding.dispose()
     }
 
     @Test

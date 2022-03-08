@@ -1,6 +1,9 @@
 package io.github.vinccool96.observable.beans.property
 
+import io.github.vinccool96.observable.beans.binding.Bindings
 import io.github.vinccool96.observable.beans.value.WritableShortValue
+import io.github.vinccool96.observable.internal.binding.BidirectionalBinding
+import io.github.vinccool96.observable.internal.binding.Logging
 
 /**
  * This class defines a [Property] wrapping a `Short` value.
@@ -18,20 +21,44 @@ import io.github.vinccool96.observable.beans.value.WritableShortValue
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-expect abstract class ShortProperty() : ReadOnlyShortProperty, Property<Number?>, WritableShortValue {
+abstract class ShortProperty : ReadOnlyShortProperty(), Property<Number?>, WritableShortValue {
 
     override var value: Number?
+        get() = super.value
+        set(value) {
+            if (value == null) {
+                Logging.logger.info("Attempt to set short property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toShort() ?: 0)
+        }
 
-    override fun bindBidirectional(other: Property<Number?>)
+    override fun bindBidirectional(other: Property<Number?>) {
+        Bindings.bindBidirectional(this, other)
+    }
 
-    override fun unbindBidirectional(other: Property<Number?>)
+    override fun unbindBidirectional(other: Property<Number?>) {
+        Bindings.unbindBidirectional(this, other)
+    }
 
     /**
      * Returns a string representation of this `ShortProperty` object.
      *
      * @return a string representation of this `ShortProperty` object.
      */
-    override fun toString(): String
+    override fun toString(): String {
+        val bean = this.bean
+        val name = this.name
+        val result = StringBuilder("ShortProperty [")
+        if (bean != null) {
+            result.append("bean: ").append(bean).append(", ")
+        }
+        if (name != null && name.isNotEmpty()) {
+            result.append("name: ").append(name).append(", ")
+        }
+        result.append("value: ").append(get()).append("]")
+        return result.toString()
+    }
 
     /**
      * Creates an [ObjectProperty] that bidirectionally bound to this `ShortProperty`. If the value of this
@@ -40,15 +67,36 @@ expect abstract class ShortProperty() : ReadOnlyShortProperty, Property<Number?>
      * Can be used for binding an ObjectProperty to ShortProperty.
      *
      * ```
-     * val shortProperty: ShortProperty = SimpleShortProperty(1)
-     * val objectProperty: ObjectProperty<Short> = SimpleObjectProperty(2)
+     * val shortProperty: ShortProperty = SimpleShortProperty(0)
+     * val objectProperty: ObjectProperty<Short> = SimpleObjectProperty0
      *
      * objectProperty.bind(shortProperty.asObject())
      * ```
      *
      * @return the new `ObjectProperty`
      */
-    override fun asObject(): ObjectProperty<Short>
+    override fun asObject(): ObjectProperty<Short> {
+        return object : ObjectPropertyBase<Short>(this@ShortProperty.shortValue) {
+
+            init {
+                BidirectionalBinding.bind(this as Property<Number?>, this@ShortProperty)
+            }
+
+            override val bean: Any?
+                get() = null // Virtual property, does not exist on a bean
+
+            override val name: String?
+                get() = this@ShortProperty.name
+
+            protected fun finalize() {
+                try {
+                    BidirectionalBinding.unbind(this, this@ShortProperty)
+                } finally {
+                }
+            }
+
+        }
+    }
 
     companion object {
 
@@ -58,8 +106,8 @@ expect abstract class ShortProperty() : ReadOnlyShortProperty, Property<Number?>
          *
          * This is very useful when bidirectionally binding an ObjectProperty<Short> and an ShortProperty.
          * ```
-         * val shortProperty: ShortProperty = SimpleShortProperty(1)
-         * val objectProperty: ObjectProperty<Short> = SimpleObjectProperty(2)
+         * val shortProperty: ShortProperty = SimpleShortProperty(0)
+         * val objectProperty: ObjectProperty<Short> = SimpleObjectProperty(0)
          *
          * // Need to keep the reference as bidirectional binding uses weak references
          * val objectAsShort: ShortProperty = ShortProperty.shortProperty(objectProperty)
@@ -73,7 +121,28 @@ expect abstract class ShortProperty() : ReadOnlyShortProperty, Property<Number?>
          *
          * @return A `ShortProperty` that wraps the `Property` if necessary
          */
-        fun shortProperty(property: Property<Short?>): ShortProperty
+        fun shortProperty(property: Property<Short?>): ShortProperty {
+            return if (property is ShortProperty) property else object : ShortPropertyBase() {
+
+                init {
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
+                }
+
+                override val bean: Any?
+                    get() = null // Virtual property, does not exist on a bean
+
+                override val name: String?
+                    get() = property.name
+
+                protected fun finalize() {
+                    try {
+                        BidirectionalBinding.unbind(property, this)
+                    } finally {
+                    }
+                }
+
+            }
+        }
 
     }
 

@@ -1,6 +1,9 @@
 package io.github.vinccool96.observable.beans.property
 
+import io.github.vinccool96.observable.beans.binding.Bindings
 import io.github.vinccool96.observable.beans.value.WritableLongValue
+import io.github.vinccool96.observable.internal.binding.BidirectionalBinding
+import io.github.vinccool96.observable.internal.binding.Logging
 
 /**
  * This class defines a [Property] wrapping a `Long` value.
@@ -18,20 +21,44 @@ import io.github.vinccool96.observable.beans.value.WritableLongValue
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-expect abstract class LongProperty() : ReadOnlyLongProperty, Property<Number?>, WritableLongValue {
+abstract class LongProperty : ReadOnlyLongProperty(), Property<Number?>, WritableLongValue {
 
     override var value: Number?
+        get() = super.value
+        set(value) {
+            if (value == null) {
+                Logging.logger.info("Attempt to set long property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toLong() ?: 0L)
+        }
 
-    override fun bindBidirectional(other: Property<Number?>)
+    override fun bindBidirectional(other: Property<Number?>) {
+        Bindings.bindBidirectional(this, other)
+    }
 
-    override fun unbindBidirectional(other: Property<Number?>)
+    override fun unbindBidirectional(other: Property<Number?>) {
+        Bindings.unbindBidirectional(this, other)
+    }
 
     /**
      * Returns a string representation of this `LongProperty` object.
      *
      * @return a string representation of this `LongProperty` object.
      */
-    override fun toString(): String
+    override fun toString(): String {
+        val bean = this.bean
+        val name = this.name
+        val result = StringBuilder("LongProperty [")
+        if (bean != null) {
+            result.append("bean: ").append(bean).append(", ")
+        }
+        if (name != null && name.isNotEmpty()) {
+            result.append("name: ").append(name).append(", ")
+        }
+        result.append("value: ").append(get()).append("]")
+        return result.toString()
+    }
 
     /**
      * Creates an [ObjectProperty] that bidirectionally bound to this `LongProperty`. If the value of this
@@ -40,15 +67,36 @@ expect abstract class LongProperty() : ReadOnlyLongProperty, Property<Number?>, 
      * Can be used for binding an ObjectProperty to LongProperty.
      *
      * ```
-     * val longProperty: LongProperty = SimpleLongProperty(1)
-     * val objectProperty: ObjectProperty<Long> = SimpleObjectProperty(2)
+     * val longProperty: LongProperty = SimpleLongProperty(0L)
+     * val objectProperty: ObjectProperty<Long> = SimpleObjectProperty0L
      *
      * objectProperty.bind(longProperty.asObject())
      * ```
      *
      * @return the new `ObjectProperty`
      */
-    override fun asObject(): ObjectProperty<Long>
+    override fun asObject(): ObjectProperty<Long> {
+        return object : ObjectPropertyBase<Long>(this@LongProperty.longValue) {
+
+            init {
+                BidirectionalBinding.bind(this as Property<Number?>, this@LongProperty)
+            }
+
+            override val bean: Any?
+                get() = null // Virtual property, does not exist on a bean
+
+            override val name: String?
+                get() = this@LongProperty.name
+
+            protected fun finalize() {
+                try {
+                    BidirectionalBinding.unbind(this, this@LongProperty)
+                } finally {
+                }
+            }
+
+        }
+    }
 
     companion object {
 
@@ -58,8 +106,8 @@ expect abstract class LongProperty() : ReadOnlyLongProperty, Property<Number?>, 
          *
          * This is very useful when bidirectionally binding an ObjectProperty<Long> and an LongProperty.
          * ```
-         * val longProperty: LongProperty = SimpleLongProperty(1)
-         * val objectProperty: ObjectProperty<Long> = SimpleObjectProperty(2)
+         * val longProperty: LongProperty = SimpleLongProperty(0L)
+         * val objectProperty: ObjectProperty<Long> = SimpleObjectProperty(0L)
          *
          * // Need to keep the reference as bidirectional binding uses weak references
          * val objectAsLong: LongProperty = LongProperty.longProperty(objectProperty)
@@ -73,7 +121,28 @@ expect abstract class LongProperty() : ReadOnlyLongProperty, Property<Number?>, 
          *
          * @return A `LongProperty` that wraps the `Property` if necessary
          */
-        fun longProperty(property: Property<Long?>): LongProperty
+        fun longProperty(property: Property<Long?>): LongProperty {
+            return if (property is LongProperty) property else object : LongPropertyBase() {
+
+                init {
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
+                }
+
+                override val bean: Any?
+                    get() = null // Virtual property, does not exist on a bean
+
+                override val name: String?
+                    get() = property.name
+
+                protected fun finalize() {
+                    try {
+                        BidirectionalBinding.unbind(property, this)
+                    } finally {
+                    }
+                }
+
+            }
+        }
 
     }
 

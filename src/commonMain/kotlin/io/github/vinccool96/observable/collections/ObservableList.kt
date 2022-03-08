@@ -1,6 +1,9 @@
 package io.github.vinccool96.observable.collections
 
 import io.github.vinccool96.observable.beans.Observable
+import io.github.vinccool96.observable.collections.transformation.FilteredList
+import io.github.vinccool96.observable.collections.transformation.SortedList
+import io.github.vinccool96.observable.dev.Predicate
 
 /**
  * A list that allows listeners to track changes when they occur.
@@ -94,12 +97,48 @@ interface ObservableList<E> : MutableList<E>, Observable {
      */
     fun remove(from: Int, to: Int)
 
-    // TODO: add fun filtered(predicate: Predicate<E>): FilteredList<E>
+    /**
+     * Creates a [FilteredList] wrapper of this list using the specified predicate.
+     *
+     * @param predicate the predicate to use
+     *
+     * @return new `FilteredList`
+     */
+    fun filtered(predicate: Predicate<E>): FilteredList<E> {
+        return FilteredList(this, predicate)
+    }
 
-    // TODO: add fun filtered(predicate: Predicate<E>): FilteredList<E>
+    /**
+     * Creates a [SortedList] wrapper of this list using the specified comparator.
+     *
+     * @param comparator the comparator to use or null for unordered List
+     *
+     * @return new `SortedList`
+     */
+    fun sorted(comparator: Comparator<E>): SortedList<E> {
+        return SortedList(this, comparator)
+    }
 
-    // TODO: add fun sorted(comparator: Comparator<E>): SortedList<E>
-
-    // TODO: add fun sorted(): SortedList<E>
+    /**
+     * Creates a [SortedList] wrapper of this list with the natural ordering.
+     *
+     * @return new `SortedList`
+     */
+    fun sorted(): SortedList<E> {
+        val naturalOrder: Comparator<E> = Comparator { o1, o2 ->
+            return@Comparator if (o1 == null && o2 == null) {
+                0
+            } else if (o1 == null) {
+                -1
+            } else if (o2 == null) {
+                1
+            } else if (o1 is Comparable<*>) {
+                (o1 as Comparable<E>).compareTo(o2)
+            } else {
+                o1.toString().compareTo(o2.toString())
+            }
+        }
+        return this.sorted(naturalOrder)
+    }
 
 }

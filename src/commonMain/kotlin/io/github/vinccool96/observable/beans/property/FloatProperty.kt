@@ -1,6 +1,9 @@
 package io.github.vinccool96.observable.beans.property
 
+import io.github.vinccool96.observable.beans.binding.Bindings
 import io.github.vinccool96.observable.beans.value.WritableFloatValue
+import io.github.vinccool96.observable.internal.binding.BidirectionalBinding
+import io.github.vinccool96.observable.internal.binding.Logging
 
 /**
  * This class defines a [Property] wrapping a `Float` value.
@@ -18,20 +21,45 @@ import io.github.vinccool96.observable.beans.value.WritableFloatValue
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-expect abstract class FloatProperty() : ReadOnlyFloatProperty, Property<Number?>, WritableFloatValue {
+abstract class FloatProperty : ReadOnlyFloatProperty(), Property<Number?>, WritableFloatValue {
 
     override var value: Number?
+        get() = super.value
+        set(value) {
+            if (value == null) {
+                Logging.logger.info("Attempt to set float property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toFloat() ?: 0.0f)
+        }
 
-    override fun bindBidirectional(other: Property<Number?>)
+    override fun bindBidirectional(other: Property<Number?>) {
+        Bindings.bindBidirectional(this, other)
+    }
 
-    override fun unbindBidirectional(other: Property<Number?>)
+    override fun unbindBidirectional(other: Property<Number?>) {
+        Bindings.unbindBidirectional(this, other)
+    }
 
     /**
      * Returns a string representation of this `FloatProperty` object.
      *
      * @return a string representation of this `FloatProperty` object.
      */
-    override fun toString(): String
+    override fun toString(): String {
+        val bean = this.bean
+        val name = this.name
+        val result = StringBuilder("FloatProperty [")
+        if (bean != null) {
+            result.append("bean: ").append(bean).append(", ")
+        }
+        if (name != null && name.isNotEmpty()) {
+            result.append("name: ").append(name).append(", ")
+        }
+        val v: Float = get()
+        result.append("value: ").append(if (v == 0.0f) "0.0" else "$v").append("]")
+        return result.toString()
+    }
 
     /**
      * Creates an [ObjectProperty] that bidirectionally bound to this `FloatProperty`. If the value of this
@@ -40,15 +68,36 @@ expect abstract class FloatProperty() : ReadOnlyFloatProperty, Property<Number?>
      * Can be used for binding an ObjectProperty to FloatProperty.
      *
      * ```
-     * val floatProperty: FloatProperty = SimpleFloatProperty(1)
-     * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty(2)
+     * val floatProperty: FloatProperty = SimpleFloatProperty(0.0f)
+     * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty0.0f
      *
      * objectProperty.bind(floatProperty.asObject())
      * ```
      *
      * @return the new `ObjectProperty`
      */
-    override fun asObject(): ObjectProperty<Float>
+    override fun asObject(): ObjectProperty<Float> {
+        return object : ObjectPropertyBase<Float>(this@FloatProperty.floatValue) {
+
+            init {
+                BidirectionalBinding.bind(this as Property<Number?>, this@FloatProperty)
+            }
+
+            override val bean: Any?
+                get() = null // Virtual property, does not exist on a bean
+
+            override val name: String?
+                get() = this@FloatProperty.name
+
+            protected fun finalize() {
+                try {
+                    BidirectionalBinding.unbind(this, this@FloatProperty)
+                } finally {
+                }
+            }
+
+        }
+    }
 
     companion object {
 
@@ -58,8 +107,8 @@ expect abstract class FloatProperty() : ReadOnlyFloatProperty, Property<Number?>
          *
          * This is very useful when bidirectionally binding an ObjectProperty<Float> and an FloatProperty.
          * ```
-         * val floatProperty: FloatProperty = SimpleFloatProperty(1)
-         * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty(2)
+         * val floatProperty: FloatProperty = SimpleFloatProperty(0.0f)
+         * val objectProperty: ObjectProperty<Float> = SimpleObjectProperty(0.0f)
          *
          * // Need to keep the reference as bidirectional binding uses weak references
          * val objectAsFloat: FloatProperty = FloatProperty.floatProperty(objectProperty)
@@ -73,7 +122,28 @@ expect abstract class FloatProperty() : ReadOnlyFloatProperty, Property<Number?>
          *
          * @return A `FloatProperty` that wraps the `Property` if necessary
          */
-        fun floatProperty(property: Property<Float?>): FloatProperty
+        fun floatProperty(property: Property<Float?>): FloatProperty {
+            return if (property is FloatProperty) property else object : FloatPropertyBase() {
+
+                init {
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
+                }
+
+                override val bean: Any?
+                    get() = null // Virtual property, does not exist on a bean
+
+                override val name: String?
+                    get() = property.name
+
+                protected fun finalize() {
+                    try {
+                        BidirectionalBinding.unbind(property, this)
+                    } finally {
+                    }
+                }
+
+            }
+        }
 
     }
 

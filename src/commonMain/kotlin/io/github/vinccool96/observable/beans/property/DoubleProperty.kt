@@ -1,6 +1,9 @@
 package io.github.vinccool96.observable.beans.property
 
+import io.github.vinccool96.observable.beans.binding.Bindings
 import io.github.vinccool96.observable.beans.value.WritableDoubleValue
+import io.github.vinccool96.observable.internal.binding.BidirectionalBinding
+import io.github.vinccool96.observable.internal.binding.Logging
 
 /**
  * This class defines a [Property] wrapping a `Double` value.
@@ -18,20 +21,45 @@ import io.github.vinccool96.observable.beans.value.WritableDoubleValue
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-expect abstract class DoubleProperty() : ReadOnlyDoubleProperty, Property<Number?>, WritableDoubleValue {
+abstract class DoubleProperty : ReadOnlyDoubleProperty(), Property<Number?>, WritableDoubleValue {
 
     override var value: Number?
+        get() = super.value
+        set(value) {
+            if (value == null) {
+                Logging.logger.info("Attempt to set double property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toDouble() ?: 0.0)
+        }
 
-    override fun bindBidirectional(other: Property<Number?>)
+    override fun bindBidirectional(other: Property<Number?>) {
+        Bindings.bindBidirectional(this, other)
+    }
 
-    override fun unbindBidirectional(other: Property<Number?>)
+    override fun unbindBidirectional(other: Property<Number?>) {
+        Bindings.unbindBidirectional(this, other)
+    }
 
     /**
      * Returns a string representation of this `DoubleProperty` object.
      *
      * @return a string representation of this `DoubleProperty` object.
      */
-    override fun toString(): String
+    override fun toString(): String {
+        val bean = this.bean
+        val name = this.name
+        val result = StringBuilder("DoubleProperty [")
+        if (bean != null) {
+            result.append("bean: ").append(bean).append(", ")
+        }
+        if (name != null && name.isNotEmpty()) {
+            result.append("name: ").append(name).append(", ")
+        }
+        val v = get()
+        result.append("value: ").append(if (v == 0.0) "0.0" else v.toString()).append("]")
+        return result.toString()
+    }
 
     /**
      * Creates an [ObjectProperty] that bidirectionally bound to this `DoubleProperty`. If the value of this
@@ -40,15 +68,36 @@ expect abstract class DoubleProperty() : ReadOnlyDoubleProperty, Property<Number
      * Can be used for binding an ObjectProperty to DoubleProperty.
      *
      * ```
-     * val doubleProperty: DoubleProperty = SimpleDoubleProperty(1)
-     * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2)
+     * val doubleProperty: DoubleProperty = SimpleDoubleProperty(0.0)
+     * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty0.0
      *
      * objectProperty.bind(doubleProperty.asObject())
      * ```
      *
      * @return the new `ObjectProperty`
      */
-    override fun asObject(): ObjectProperty<Double>
+    override fun asObject(): ObjectProperty<Double> {
+        return object : ObjectPropertyBase<Double>(this@DoubleProperty.doubleValue) {
+
+            init {
+                BidirectionalBinding.bind(this as Property<Number?>, this@DoubleProperty)
+            }
+
+            override val bean: Any?
+                get() = null // Virtual property, does not exist on a bean
+
+            override val name: String?
+                get() = this@DoubleProperty.name
+
+            protected fun finalize() {
+                try {
+                    BidirectionalBinding.unbind(this, this@DoubleProperty)
+                } finally {
+                }
+            }
+
+        }
+    }
 
     companion object {
 
@@ -58,8 +107,8 @@ expect abstract class DoubleProperty() : ReadOnlyDoubleProperty, Property<Number
          *
          * This is very useful when bidirectionally binding an ObjectProperty<Double> and an DoubleProperty.
          * ```
-         * val doubleProperty: DoubleProperty = SimpleDoubleProperty(1)
-         * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(2)
+         * val doubleProperty: DoubleProperty = SimpleDoubleProperty(0.0)
+         * val objectProperty: ObjectProperty<Double> = SimpleObjectProperty(0.0)
          *
          * // Need to keep the reference as bidirectional binding uses weak references
          * val objectAsDouble: DoubleProperty = DoubleProperty.doubleProperty(objectProperty)
@@ -73,7 +122,28 @@ expect abstract class DoubleProperty() : ReadOnlyDoubleProperty, Property<Number
          *
          * @return A `DoubleProperty` that wraps the `Property` if necessary
          */
-        fun doubleProperty(property: Property<Double?>): DoubleProperty
+        fun doubleProperty(property: Property<Double?>): DoubleProperty {
+            return if (property is DoubleProperty) property else object : DoublePropertyBase() {
+
+                init {
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
+                }
+
+                override val bean: Any?
+                    get() = null // Virtual property, does not exist on a bean
+
+                override val name: String?
+                    get() = property.name
+
+                protected fun finalize() {
+                    try {
+                        BidirectionalBinding.unbind(property, this)
+                    } finally {
+                    }
+                }
+
+            }
+        }
 
     }
 

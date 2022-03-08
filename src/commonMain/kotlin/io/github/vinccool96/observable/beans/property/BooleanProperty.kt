@@ -1,6 +1,9 @@
 package io.github.vinccool96.observable.beans.property
 
+import io.github.vinccool96.observable.beans.binding.Bindings
 import io.github.vinccool96.observable.beans.value.WritableBooleanValue
+import io.github.vinccool96.observable.internal.binding.BidirectionalBinding
+import io.github.vinccool96.observable.internal.binding.Logging
 
 /**
  * This class provides a full implementation of a [Property] wrapping a `Boolean` value.
@@ -18,20 +21,44 @@ import io.github.vinccool96.observable.beans.value.WritableBooleanValue
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-expect abstract class BooleanProperty() : ReadOnlyBooleanProperty, Property<Boolean?>, WritableBooleanValue {
+abstract class BooleanProperty : ReadOnlyBooleanProperty(), Property<Boolean?>, WritableBooleanValue {
 
     override var value: Boolean?
+        get() = this.get()
+        set(value) {
+            if (value == null) {
+                Logging.logger.info("Attempt to set boolean property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value ?: false)
+        }
 
-    override fun bindBidirectional(other: Property<Boolean?>)
+    override fun bindBidirectional(other: Property<Boolean?>) {
+        Bindings.bindBidirectional(this, other)
+    }
 
-    override fun unbindBidirectional(other: Property<Boolean?>)
+    override fun unbindBidirectional(other: Property<Boolean?>) {
+        Bindings.unbindBidirectional(this, other)
+    }
 
     /**
      * Returns a string representation of this `BooleanProperty` object.
      *
      * @return a string representation of this `BooleanProperty` object.
      */
-    override fun toString(): String
+    override fun toString(): String {
+        val bean = this.bean
+        val name = this.name
+        val result = StringBuilder("BooleanProperty [")
+        if (bean != null) {
+            result.append("bean: ").append(bean).append(", ")
+        }
+        if (name != null && name.isNotEmpty()) {
+            result.append("name: ").append(name).append(", ")
+        }
+        result.append("value: ").append(get()).append("]")
+        return result.toString()
+    }
 
     /**
      * Creates an [ObjectProperty] that holds the value of this `BooleanProperty`. If the value of this
@@ -39,7 +66,28 @@ expect abstract class BooleanProperty() : ReadOnlyBooleanProperty, Property<Bool
      *
      * @return the new `ObjectProperty`
      */
-    override fun asObject(): ObjectProperty<Boolean>
+    override fun asObject(): ObjectProperty<Boolean> {
+        return object : ObjectPropertyBase<Boolean>(this@BooleanProperty.get()) {
+
+            init {
+                BidirectionalBinding.bind(this as Property<Boolean?>, this@BooleanProperty)
+            }
+
+            override val bean: Any?
+                get() = null // Virtual property, does not exist on a bean
+
+            override val name: String?
+                get() = this@BooleanProperty.name
+
+            protected fun finalize() {
+                try {
+                    BidirectionalBinding.unbind(this, this@BooleanProperty)
+                } finally {
+                }
+            }
+
+        }
+    }
 
     companion object {
 
@@ -53,7 +101,28 @@ expect abstract class BooleanProperty() : ReadOnlyBooleanProperty, Property<Bool
          *
          * @return A `BooleanProperty` that wraps the `Property` if necessary
          */
-        fun booleanProperty(property: Property<Boolean?>): BooleanProperty
+        fun booleanProperty(property: Property<Boolean?>): BooleanProperty {
+            return if (property is BooleanProperty) property else object : BooleanPropertyBase() {
+
+                init {
+                    BidirectionalBinding.bind(this as Property<Boolean?>, property)
+                }
+
+                override val bean: Any?
+                    get() = null // Virtual property, does not exist on a bean
+
+                override val name: String?
+                    get() = property.name
+
+                protected fun finalize() {
+                    try {
+                        BidirectionalBinding.unbind(property, this)
+                    } finally {
+                    }
+                }
+
+            }
+        }
 
     }
 

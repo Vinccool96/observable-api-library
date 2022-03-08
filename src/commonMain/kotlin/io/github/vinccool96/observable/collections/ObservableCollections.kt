@@ -1,14 +1,20 @@
 package io.github.vinccool96.observable.collections
 
 import io.github.vinccool96.observable.beans.InvalidationListener
+import io.github.vinccool96.observable.beans.Observable
 import io.github.vinccool96.observable.collections.ObservableCollections.emptyObservableList
+import io.github.vinccool96.observable.collections.ObservableCollections.unmodifiableObservableList
+import io.github.vinccool96.observable.dev.Callback
 import io.github.vinccool96.observable.dev.ReturnsUnmodifiableCollection
-import io.github.vinccool96.observable.internal.collections.ImmutableObservableList
+import io.github.vinccool96.observable.internal.collections.ObservableListWrapper
+import io.github.vinccool96.observable.internal.collections.ObservableSequentialListWrapper
+import io.github.vinccool96.observable.internal.collections.SortableList
+import io.github.vinccool96.observable.internal.collections.SourceAdapterListChange
 
 /**
  * Utility object that consists of methods that are 1:1 copies of Java's `Collections` methods.
  *
- * The wrapper methods (like [synchronizedObservableList] or [emptyObservableList]) has exactly the same functionality
+ * The wrapper methods (like [unmodifiableObservableList] or [emptyObservableList]) has exactly the same functionality
  * as the methods in `Collections`, with exception that they return [ObservableList] and are therefore suitable for
  * methods that require `ObservableList` on input.
  *
@@ -17,6 +23,30 @@ import io.github.vinccool96.observable.internal.collections.ImmutableObservableL
  * `ObservableList` multiple times, resulting in a number of notifications.
  */
 object ObservableCollections {
+
+    private fun <E> singletonIterator(e: E): MutableIterator<E> {
+        return object : MutableIterator<E> {
+
+            private var hasNext: Boolean = true
+
+            override fun hasNext(): Boolean {
+                return this.hasNext
+            }
+
+            override fun next(): E {
+                if (this.hasNext) {
+                    this.hasNext = false
+                    return e
+                }
+                throw NoSuchElementException()
+            }
+
+            override fun remove() {
+                throw UnsupportedOperationException()
+            }
+
+        }
+    }
 
     /**
      * Constructs an ObservableList that is backed by the specified list. Mutation operations on the ObservableList
@@ -30,9 +60,96 @@ object ObservableCollections {
      *
      * @return a newly created ObservableList
      */
-    fun <E> observableList(list: MutableList<E>): ObservableList<E> { // TODO the real function
-        val a = Array<Any?>(list.size) { i: Int -> list[i] }
-        return ImmutableObservableList(*(a as Array<E>))
+    fun <E> observableList(list: MutableList<E>): ObservableList<E> {
+        return if (list is RandomAccess) ObservableListWrapper(list) else ObservableSequentialListWrapper(list)
+    }
+
+    /**
+     * Constructs an ObservableList that is backed by the specified list. Mutation operations on the ObservableList
+     * instance will be reported to observers that have registered on that instance.
+     *
+     * Note that mutation operations made directly to the underlying list are *not* reported to observers of any
+     * ObservableList that wraps it.
+     *
+     * This list also reports mutations of the elements in it by using `extractor`. Observable objects returned by
+     * `extractor` (applied to each list element) are listened for changes and transformed into "update" change of
+     * ListChangeListener.
+     *
+     * @param E the list element type
+     * @param list a concrete MutableList that backs this ObservableList
+     * @param extractor element to Observable[] convertor
+     *
+     * @return a newly created ObservableList
+     */
+    fun <E> observableList(list: MutableList<E>, extractor: Callback<E, Array<Observable>>): ObservableList<E> {
+        return if (list is RandomAccess) {
+            ObservableListWrapper(list, extractor)
+        } else {
+            ObservableSequentialListWrapper(list, extractor)
+        }
+    }
+
+    /**
+     * Sorts the provided observable list. Fires only **one** change notification on the list.
+     *
+     * @param T the list element type
+     * @param list the list to be sorted
+     */
+    fun <T : Comparable<T>> sort(list: ObservableList<T>) {
+        if (list is SortableList<*>) {
+            list.sort()
+        } else {
+            val newContent: MutableList<T> = ArrayList(list)
+            newContent.sort()
+            list.setAll(newContent)
+        }
+    }
+
+    /**
+     * Sorts the provided observable list using the c comparator. Fires only **one** change notification on the list.
+     *
+     * @param T the list element type
+     * @param list the list to sort
+     * @param c comparator used for sorting. Null if natural ordering is required.
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <T> sort(list: ObservableList<T>, c: Comparator<in T>) {
+        if (list is SortableList<*>) {
+            (list as SortableList<T>).sortWith(c)
+        } else {
+            val newContent: MutableList<T> = ArrayList(list)
+            newContent.sortWith(c)
+            list.setAll(newContent)
+        }
+    }
+
+    /**
+     * Creates a new empty observable list that is backed by an arraylist.
+     *
+     * @param E the list element type
+     *
+     * @return a newly created ObservableList
+     *
+     * @see observableList
+     */
+    fun <E> observableArrayList(): ObservableList<E> {
+        return observableList(ArrayList())
+    }
+
+    /**
+     * Creates a new empty observable list backed by an arraylist.
+     *
+     * This list reports element updates.
+     *
+     * @param E the list element type
+     * @param extractor element to Observable[] convertor. Observable objects are listened for changes on the element.
+     *
+     * @return a newly created ObservableList
+     *
+     * @see observableList
+     */
+    fun <E> observableArrayList(extractor: Callback<E, Array<Observable>>): ObservableList<E> {
+        return observableList(ArrayList(), extractor)
     }
 
     /**
@@ -46,8 +163,9 @@ object ObservableCollections {
      * @see observableArrayList
      */
     fun <E> observableArrayList(vararg items: E): ObservableList<E> {
-        val a = Array<Any?>(items.size) { i: Int -> items[i] }
-        return ImmutableObservableList(*(a as Array<E>))
+        val list: ObservableList<E> = observableArrayList()
+        list.addAll(*items)
+        return list
     }
 
     /**
@@ -58,9 +176,10 @@ object ObservableCollections {
      *
      * @return a newly created observableArrayList
      */
-    fun <E> observableArrayList(col: List<E>): ObservableList<E> { // TODO the real function
-        val a = Array<Any?>(col.size) { i: Int -> col[i] }
-        return ImmutableObservableList(*(a as Array<E>))
+    fun <E> observableArrayList(col: Collection<E>): ObservableList<E> {
+        val list: ObservableList<E> = observableArrayList()
+        list.addAll(col)
+        return list
     }
 
     /**
@@ -71,9 +190,8 @@ object ObservableCollections {
      *
      * @return an ObservableList wrapper that is unmodifiable
      */
-    fun <E> unmodifiableObservableList(list: ObservableList<E>): ObservableList<E> {  // TODO the real function
-        val a = Array<Any?>(list.size) { i: Int -> list[i] }
-        return ImmutableObservableList(*(a as Array<E>))
+    fun <E> unmodifiableObservableList(list: ObservableList<E>): ObservableList<E> {
+        return UnmodifiableObservableListImpl(list)
     }
 
     /**
@@ -320,6 +438,62 @@ object ObservableCollections {
                 throw IndexOutOfBoundsException()
             }
             return this.element
+        }
+
+    }
+
+    private class UnmodifiableObservableListImpl<T>(private val backingList: ObservableList<T>) :
+            ObservableListBase<T>(), ObservableList<T> {
+
+        private val listener: ListChangeListener<T> = ListChangeListener { change ->
+            fireChange(SourceAdapterListChange(this@UnmodifiableObservableListImpl, change))
+        }
+
+        init {
+            this.backingList.addListener(this.listener)
+        }
+
+        override fun get(index: Int): T {
+            return this.backingList[index]
+        }
+
+        override val size: Int
+            get() = this.backingList.size
+
+        override fun add(index: Int, element: T) {
+            throw UnsupportedOperationException()
+        }
+
+        override fun removeAt(index: Int): T {
+            throw UnsupportedOperationException()
+        }
+
+        override fun set(index: Int, element: T): T {
+            throw UnsupportedOperationException()
+        }
+
+        override fun addAll(vararg elements: T): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(vararg elements: T): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun setAll(col: Collection<T>): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun removeAll(vararg elements: T): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun retainAll(vararg elements: T): Boolean {
+            throw UnsupportedOperationException()
+        }
+
+        override fun remove(from: Int, to: Int) {
+            throw UnsupportedOperationException()
         }
 
     }

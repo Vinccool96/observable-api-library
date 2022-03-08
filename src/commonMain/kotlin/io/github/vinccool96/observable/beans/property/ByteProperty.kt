@@ -1,37 +1,49 @@
 package io.github.vinccool96.observable.beans.property
 
+import io.github.vinccool96.observable.beans.binding.Bindings
 import io.github.vinccool96.observable.beans.value.WritableByteValue
+import io.github.vinccool96.observable.internal.binding.BidirectionalBinding
+import io.github.vinccool96.observable.internal.binding.Logging
 
-/**
- * This class defines a [Property] wrapping a `Byte` value.
- *
- * The value of a `ByteProperty` can be got and set with [get], [set], and [value].
- *
- * A property can be bound and unbound unidirectional with [bind] and [unbind]. Bidirectional bindings can be created
- * and removed with [bindBidirectional] and [unbindBidirectional].
- *
- * The context of a `ObjectProperty` can be read with [bean] and [name].
- *
- * @see io.github.vinccool96.observable.beans.value.ObservableByteValue
- * @see WritableByteValue
- * @see ReadOnlyByteProperty
- * @see Property
- */
 @Suppress("UNCHECKED_CAST")
-expect abstract class ByteProperty() : ReadOnlyByteProperty, Property<Number?>, WritableByteValue {
+abstract class ByteProperty : ReadOnlyByteProperty(), Property<Number?>, WritableByteValue {
 
     override var value: Number?
+        get() = super.value
+        set(value) {
+            if (value == null) {
+                Logging.logger.info("Attempt to set byte property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toByte() ?: 0)
+        }
 
-    override fun bindBidirectional(other: Property<Number?>)
+    override fun bindBidirectional(other: Property<Number?>) {
+        Bindings.bindBidirectional(this, other)
+    }
 
-    override fun unbindBidirectional(other: Property<Number?>)
+    override fun unbindBidirectional(other: Property<Number?>) {
+        Bindings.unbindBidirectional(this, other)
+    }
 
     /**
      * Returns a string representation of this `ByteProperty` object.
      *
      * @return a string representation of this `ByteProperty` object.
      */
-    override fun toString(): String
+    override fun toString(): String {
+        val bean = this.bean
+        val name = this.name
+        val result = StringBuilder("ByteProperty [")
+        if (bean != null) {
+            result.append("bean: ").append(bean).append(", ")
+        }
+        if (name != null && name.isNotEmpty()) {
+            result.append("name: ").append(name).append(", ")
+        }
+        result.append("value: ").append(get()).append("]")
+        return result.toString()
+    }
 
     /**
      * Creates an [ObjectProperty] that bidirectionally bound to this `ByteProperty`. If the value of this
@@ -48,7 +60,28 @@ expect abstract class ByteProperty() : ReadOnlyByteProperty, Property<Number?>, 
      *
      * @return the new `ObjectProperty`
      */
-    override fun asObject(): ObjectProperty<Byte>
+    override fun asObject(): ObjectProperty<Byte> {
+        return object : ObjectPropertyBase<Byte>(this@ByteProperty.byteValue) {
+
+            init {
+                BidirectionalBinding.bind(this as Property<Number?>, this@ByteProperty)
+            }
+
+            override val bean: Any?
+                get() = null // Virtual property, does not exist on a bean
+
+            override val name: String?
+                get() = this@ByteProperty.name
+
+            protected fun finalize() {
+                try {
+                    BidirectionalBinding.unbind(this, this@ByteProperty)
+                } finally {
+                }
+            }
+
+        }
+    }
 
     companion object {
 
@@ -73,7 +106,28 @@ expect abstract class ByteProperty() : ReadOnlyByteProperty, Property<Number?>, 
          *
          * @return A `ByteProperty` that wraps the `Property` if necessary
          */
-        fun byteProperty(property: Property<Byte?>): ByteProperty
+        fun byteProperty(property: Property<Byte?>): ByteProperty {
+            return if (property is ByteProperty) property else object : BytePropertyBase() {
+
+                init {
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
+                }
+
+                override val bean: Any?
+                    get() = null // Virtual property, does not exist on a bean
+
+                override val name: String?
+                    get() = property.name
+
+                protected fun finalize() {
+                    try {
+                        BidirectionalBinding.unbind(property, this)
+                    } finally {
+                    }
+                }
+
+            }
+        }
 
     }
 

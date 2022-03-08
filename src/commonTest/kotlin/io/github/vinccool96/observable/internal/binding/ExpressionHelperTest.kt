@@ -4,7 +4,7 @@ import io.github.vinccool96.observable.beans.InvalidationListener
 import io.github.vinccool96.observable.beans.InvalidationListenerMock
 import io.github.vinccool96.observable.beans.WeakInvalidationListenerMock
 import io.github.vinccool96.observable.beans.value.*
-import io.github.vinccool96.observable.test.BitVector
+import io.github.vinccool96.observable.internal.utils.BitVector
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue

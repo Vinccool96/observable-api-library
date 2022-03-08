@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.commonMain.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.commonMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.commonTest.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.commonTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.jsMain.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.jsMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.jsTest.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.jsTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.jvmMain.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.jvmMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.jvmTest.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.jvmTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.main.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.nativeMain.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.nativeMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.nativeTest.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.nativeTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/observable-api-library.test.iml" filepath="$PROJECT_DIR$/.idea/modules/observable-api-library.test.iml" />
+    </modules>
+  </component>
+</project>

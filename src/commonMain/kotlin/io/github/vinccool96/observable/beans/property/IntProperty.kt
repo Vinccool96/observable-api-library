@@ -1,6 +1,9 @@
 package io.github.vinccool96.observable.beans.property
 
+import io.github.vinccool96.observable.beans.binding.Bindings
 import io.github.vinccool96.observable.beans.value.WritableIntValue
+import io.github.vinccool96.observable.internal.binding.BidirectionalBinding
+import io.github.vinccool96.observable.internal.binding.Logging
 
 /**
  * This class defines a [Property] wrapping a `Int` value.
@@ -18,20 +21,44 @@ import io.github.vinccool96.observable.beans.value.WritableIntValue
  * @see Property
  */
 @Suppress("UNCHECKED_CAST")
-expect abstract class IntProperty() : ReadOnlyIntProperty, Property<Number?>, WritableIntValue {
+abstract class IntProperty : ReadOnlyIntProperty(), Property<Number?>, WritableIntValue {
 
     override var value: Number?
+        get() = super.value
+        set(value) {
+            if (value == null) {
+                Logging.logger.info("Attempt to set int property to null, using default value instead.",
+                        NullPointerException())
+            }
+            this.set(value?.toInt() ?: 0)
+        }
 
-    override fun bindBidirectional(other: Property<Number?>)
+    override fun bindBidirectional(other: Property<Number?>) {
+        Bindings.bindBidirectional(this, other)
+    }
 
-    override fun unbindBidirectional(other: Property<Number?>)
+    override fun unbindBidirectional(other: Property<Number?>) {
+        Bindings.unbindBidirectional(this, other)
+    }
 
     /**
      * Returns a string representation of this `IntProperty` object.
      *
      * @return a string representation of this `IntProperty` object.
      */
-    override fun toString(): String
+    override fun toString(): String {
+        val bean = this.bean
+        val name = this.name
+        val result = StringBuilder("IntProperty [")
+        if (bean != null) {
+            result.append("bean: ").append(bean).append(", ")
+        }
+        if (name != null && name.isNotEmpty()) {
+            result.append("name: ").append(name).append(", ")
+        }
+        result.append("value: ").append(get()).append("]")
+        return result.toString()
+    }
 
     /**
      * Creates an [ObjectProperty] that bidirectionally bound to this `IntProperty`. If the value of this
@@ -40,15 +67,36 @@ expect abstract class IntProperty() : ReadOnlyIntProperty, Property<Number?>, Wr
      * Can be used for binding an ObjectProperty to IntProperty.
      *
      * ```
-     * val intProperty: IntProperty = SimpleIntProperty(1)
-     * val objectProperty: ObjectProperty<Int> = SimpleObjectProperty(2)
+     * val intProperty: IntProperty = SimpleIntProperty(0)
+     * val objectProperty: ObjectProperty<Int> = SimpleObjectProperty0
      *
      * objectProperty.bind(intProperty.asObject())
      * ```
      *
      * @return the new `ObjectProperty`
      */
-    override fun asObject(): ObjectProperty<Int>
+    override fun asObject(): ObjectProperty<Int> {
+        return object : ObjectPropertyBase<Int>(this@IntProperty.intValue) {
+
+            init {
+                BidirectionalBinding.bind(this as Property<Number?>, this@IntProperty)
+            }
+
+            override val bean: Any?
+                get() = null // Virtual property, does not exist on a bean
+
+            override val name: String?
+                get() = this@IntProperty.name
+
+            protected fun finalize() {
+                try {
+                    BidirectionalBinding.unbind(this, this@IntProperty)
+                } finally {
+                }
+            }
+
+        }
+    }
 
     companion object {
 
@@ -58,8 +106,8 @@ expect abstract class IntProperty() : ReadOnlyIntProperty, Property<Number?>, Wr
          *
          * This is very useful when bidirectionally binding an ObjectProperty<Int> and an IntProperty.
          * ```
-         * val intProperty: IntProperty = SimpleIntProperty(1)
-         * val objectProperty: ObjectProperty<Int> = SimpleObjectProperty(2)
+         * val intProperty: IntProperty = SimpleIntProperty(0)
+         * val objectProperty: ObjectProperty<Int> = SimpleObjectProperty(0)
          *
          * // Need to keep the reference as bidirectional binding uses weak references
          * val objectAsInt: IntProperty = IntProperty.intProperty(objectProperty)
@@ -73,7 +121,28 @@ expect abstract class IntProperty() : ReadOnlyIntProperty, Property<Number?>, Wr
          *
          * @return A `IntProperty` that wraps the `Property` if necessary
          */
-        fun intProperty(property: Property<Int?>): IntProperty
+        fun intProperty(property: Property<Int?>): IntProperty {
+            return if (property is IntProperty) property else object : IntPropertyBase() {
+
+                init {
+                    BidirectionalBinding.bind(this, property as Property<Number?>)
+                }
+
+                override val bean: Any?
+                    get() = null // Virtual property, does not exist on a bean
+
+                override val name: String?
+                    get() = property.name
+
+                protected fun finalize() {
+                    try {
+                        BidirectionalBinding.unbind(property, this)
+                    } finally {
+                    }
+                }
+
+            }
+        }
 
     }
 
