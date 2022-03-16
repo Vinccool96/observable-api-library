@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="observable-api-library:jvmMain" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="io.github.vinccool96.observable" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="5" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false" isTestModule="false" externalProjectId="observable-api-library" isHmppProject="true" pureKotlinSourceFolders="C:\Users\Vincent\Documents\IntelliJProjects\observable-api-library\src\jvmTest\kotlin;C:\Users\Vincent\Documents\IntelliJProjects\observable-api-library\src\jsMain\kotlin;C:\Users\Vincent\Documents\IntelliJProjects\observable-api-library\src\nativeMain\kotlin;C:\Users\Vincent\Documents\IntelliJProjects\observable-api-library\src\jsTest\kotlin;C:\Users\Vincent\Documents\IntelliJProjects\observable-api-library\build\externals\observable-api-library-js-legacy\src;C:\Users\Vincent\Documents\IntelliJProjects\observable-api-library\build\externals\observable-api-library-js-ir\src;C:\Users\Vincent\Documents\IntelliJProjects\observable-api-library\src\jvmMain\kotlin">
+        <dependsOnModuleNames>observable-api-library:commonMain</dependsOnModuleNames>
+        <sourceSets>
+          <sourceSet>observable-api-library.commonMain</sourceSet>
+        </sourceSets>
+        <newMppModelJpsModuleKind>COMPILATION_AND_SOURCE_SET_HOLDER</newMppModelJpsModuleKind>
+        <compilerSettings>
+          <option name="additionalArguments" value="-Xallow-no-source-files" />
+        </compilerSettings>
+        <compilerArguments>
+          <flagArguments>
+            <flagArg name="noStdlib" arg="true" />
+            <flagArg name="multiPlatform" arg="true" />
+          </flagArguments>
+          <stringArguments>
+            <stringArg name="classpath">
+              <args>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.6.20-RC/d8e669bf7e9f47b5fd24160b762c17364b466fd1/kotlin-reflect-1.6.20-RC.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.vinccool96.uncaught/uncaught-exception-handling-jvm/1.0/717be0bc27a483606f753981c7df3f406917b35c/uncaught-exception-handling-jvm-1.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.vinccool96.ref/weak-references-jvm/1.0/5cfc8d37a6f738eaf810ece35dc42bc301f509e2/weak-references-jvm-1.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.vinccool96.logging/logging-jvm/1.2/f4c29346fd6e19e4fa6231befcbcde8ca54fc102/logging-jvm-1.2.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.6.20-M1/5203bbbaba67cda6815b7a1a02c27ff6117f0aa1/kotlin-stdlib-jdk8-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.6.20-M1/92c12971e7e359de0778c0c79f6020eebe25acf1/kotlin-stdlib-jdk7-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.6.20-RC/6a30889f44dbf742494d3d296e677c8c410cac1/kotlin-stdlib-1.6.20-RC.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.32/cdcff33940d9f2de763bc41ea05a0be5941176c3/slf4j-api-1.7.32.jar</arg>
+              </args>
+            </stringArg>
+            <stringArg name="destination" arg="$MODULE_DIR$/../../build/classes/kotlin/jvm/main" />
+            <stringArg name="moduleName" arg="observable-api-library" />
+            <stringArg name="apiVersion" arg="1.6" />
+            <stringArg name="languageVersion" arg="1.6" />
+          </stringArguments>
+          <arrayArguments>
+            <arrayArg name="friendPaths" />
+            <arrayArg name="pluginClasspaths">
+              <args>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.6.20-M1/ad4a71166b13017bc45331c07b99bfa008888364/kotlin-scripting-jvm-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.6.20-M1/2188ed693f6542e6ba712ed54dec4d9d47b07db3/kotlin-scripting-common-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.6.20-M1/1ad81e2646b418647af10db795b362fb87c4a53f/kotlin-stdlib-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.6.20-M1/91359939656e351fc96edbe884e54881a3be427d/kotlin-stdlib-common-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.6.20-M1/3aaf69f8ce1430d8fc2b1402d21030a8441f37c6/kotlin-script-runtime-1.6.20-M1.jar</arg>
+              </args>
+            </arrayArg>
+            <arrayArg name="pluginOptions" />
+          </arrayArguments>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../build/classes/kotlin/jvm/main" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/jvmMain">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/jvmMain/kotlin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/jvmMain/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="observable-api-library.commonMain" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.6.20-RC" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20-M1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.6.20-RC" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.vinccool96.uncaught:uncaught-exception-handling-jvm:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.vinccool96.ref:weak-references-jvm:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.vinccool96.logging:logging-jvm:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.20-M1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.32" level="project" />
+  </component>
+</module>

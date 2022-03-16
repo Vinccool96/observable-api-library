@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="observable-api-library:commonMain" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="io.github.vinccool96.observable" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="5" platform="Common (experimental) " allPlatforms="JS []/JVM [1.8]/Native []/Native [general]" useProjectSettings="false" isTestModule="false" externalProjectId="observable-api-library" isHmppProject="true">
+        <newMppModelJpsModuleKind>SOURCE_SET_HOLDER</newMppModelJpsModuleKind>
+        <compilerSettings />
+        <compilerArguments>
+          <flagArguments>
+            <flagArg name="multiPlatform" arg="true" />
+          </flagArguments>
+          <stringArguments>
+            <stringArg name="apiVersion" arg="1.6" />
+            <stringArg name="languageVersion" arg="1.6" />
+          </stringArguments>
+          <arrayArguments>
+            <arrayArg name="pluginClasspaths">
+              <args>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.6.20-M1/ad4a71166b13017bc45331c07b99bfa008888364/kotlin-scripting-jvm-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.6.20-M1/2188ed693f6542e6ba712ed54dec4d9d47b07db3/kotlin-scripting-common-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.6.20-M1/1ad81e2646b418647af10db795b362fb87c4a53f/kotlin-stdlib-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.6.20-M1/91359939656e351fc96edbe884e54881a3be427d/kotlin-stdlib-common-1.6.20-M1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.6.20-M1/3aaf69f8ce1430d8fc2b1402d21030a8441f37c6/kotlin-script-runtime-1.6.20-M1.jar</arg>
+              </args>
+            </arrayArg>
+            <arrayArg name="pluginOptions" />
+          </arrayArguments>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/commonMain">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/commonMain/kotlin" type="kotlin-source" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/commonMain/resources" type="kotlin-resource" />
+    </content>
+    <orderEntry type="jdk" jdkName="Kotlin SDK" jdkType="KotlinSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: io.github.vinccool96.uncaught:uncaught-exception-handling:commonMain:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.20-RC" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.vinccool96.ref:weak-references:commonMain:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.vinccool96.logging:logging:commonMain:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.6.20-RC" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.6.20-RC" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+  </component>
+</module>

@@ -95,27 +95,27 @@ class FilteredListTest {
         val lo: MockListObserver<Person> = MockListObserver()
         filtered.addListener(lo)
 
-        assertEquals(Person.createPersonsList("BB", "BC"), filtered)
+        assertEquals(Person.createPersonsListFromNames("BB", "BC"), filtered)
 
         p1.name.set("AA")
         lo.checkAddRemove(0, filtered, listOf(), 0, 2)
         lo.checkAddRemove(1, filtered, listOf(), 3, 5)
         lo.checkAddRemove(2, filtered, listOf(), 6, 7)
-        assertEquals(Person.createPersonsList("AA", "AA", "BB", "AA", "AA", "BC", "AA"), filtered)
+        assertEquals(Person.createPersonsListFromNames("AA", "AA", "BB", "AA", "AA", "BC", "AA"), filtered)
 
         lo.clear()
         p1.name.set("AAA")
         lo.checkUpdate(0, filtered, 0, 2)
         lo.checkUpdate(1, filtered, 3, 5)
         lo.checkUpdate(2, filtered, 6, 7)
-        assertEquals(Person.createPersonsList("AAA", "AAA", "BB", "AAA", "AAA", "BC", "AAA"), filtered)
+        assertEquals(Person.createPersonsListFromNames("AAA", "AAA", "BB", "AAA", "AAA", "BC", "AAA"), filtered)
 
         lo.clear()
         p1.name.set("A")
-        lo.checkAddRemove(0, filtered, Person.createPersonsList("A", "A"), 0, 0)
-        lo.checkAddRemove(1, filtered, Person.createPersonsList("A", "A"), 1, 1)
-        lo.checkAddRemove(2, filtered, Person.createPersonsList("A"), 2, 2)
-        assertEquals(Person.createPersonsList("BB", "BC"), filtered)
+        lo.checkAddRemove(0, filtered, Person.createPersonsListFromNames("A", "A"), 0, 0)
+        lo.checkAddRemove(1, filtered, Person.createPersonsListFromNames("A", "A"), 1, 1)
+        lo.checkAddRemove(2, filtered, Person.createPersonsListFromNames("A"), 2, 2)
+        assertEquals(Person.createPersonsListFromNames("BB", "BC"), filtered)
     }
 
     private class Updater<E>(list: MutableList<E>) : ObservableListWrapper<E>(list) {
@@ -143,7 +143,7 @@ class FilteredListTest {
         val lo: MockListObserver<Person> = MockListObserver()
         filtered.addListener(lo)
 
-        assertEquals(Person.createPersonsList("BB2", "BC6"), filtered)
+        assertEquals(Person.createPersonsListFromNames("BB2", "BC6"), filtered)
 
         list.updateAll()
         lo.checkUpdate(0, filtered, 0, filtered.size)
@@ -155,9 +155,9 @@ class FilteredListTest {
         list[6].name.set("B6")
         list[7].name.set("AA7")
         list.updateAll()
-        assertEquals(Person.createPersonsList("AA0", "BB2", "BB3", "AA5", "AA7"), filtered)
+        assertEquals(Person.createPersonsListFromNames("AA0", "BB2", "BB3", "AA5", "AA7"), filtered)
         lo.checkAddRemove(0, filtered, listOf(), 0, 1)
-        lo.checkAddRemove(1, filtered, Person.createPersonsList("B6"), 2, 5)
+        lo.checkAddRemove(1, filtered, Person.createPersonsListFromNames("B6"), 2, 5)
         lo.checkUpdate(2, filtered, 1, 2)
     }
 

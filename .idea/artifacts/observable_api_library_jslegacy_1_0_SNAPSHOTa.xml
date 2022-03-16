@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="observable-api-library-jslegacy-1.0-SNAPSHOTa">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="observable-api-library-jslegacy-1.0-SNAPSHOTa.jar">
+      <element id="module-output" name="observable-api-library.jsMain" />
+    </root>
+  </artifact>
+</component>

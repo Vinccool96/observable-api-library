@@ -58,7 +58,7 @@ class Person(name: String) : Comparable<Person> {
             return names.map { name: String -> Person(name) }.toMutableList()
         }
 
-        fun createPersonsList(vararg names: String): ObservableList<Person> {
+        fun createPersonsListFromNames(vararg names: String): ObservableList<Person> {
             val list: ObservableList<Person> =
                     ObservableCollections.observableArrayList { param -> arrayOf(param.name) }
             list.addAll(createPersonsFromNames(*names))
