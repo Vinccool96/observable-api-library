@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="observable-api-library-jvm-1.0-SNAPSHOT">
-    <output-path>$PROJECT_DIR$/build/libs</output-path>
-    <root id="archive" name="observable-api-library-jvm-1.0-SNAPSHOT.jar">
-      <element id="module-output" name="observable-api-library.jvmMain" />
-    </root>
-  </artifact>
-</component>
