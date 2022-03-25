@@ -1,11 +1,11 @@
+val kotlinVersion = "1.6.20-RC2"
+
 plugins {
-    kotlin("multiplatform") version "1.6.20-M1"
+    kotlin("multiplatform") version "1.6.20-RC2"
 }
 
 group = "io.github.vinccool96.observable"
 version = "1.0-SNAPSHOT"
-
-val kotlinVersion = "1.6.20-RC"
 
 repositories {
     mavenCentral()
