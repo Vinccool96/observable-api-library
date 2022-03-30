@@ -21,11 +21,13 @@ class ErrorLoggingUtility {
 
     fun start() {
         reset()
+        logger.baseHandlerActivated = false
         logger.addHandler(this.handler)
     }
 
     fun stop() {
         logger.removeHandler(this.handler)
+        logger.baseHandlerActivated = true
     }
 
     fun reset() {
