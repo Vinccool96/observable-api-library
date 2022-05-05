@@ -1,7 +1,7 @@
-val kotlinVersion = "1.6.20-RC2"
+val kotlinVersion = "1.7.0-Beta"
 
 plugins {
-    kotlin("multiplatform") version "1.6.20-RC2"
+    kotlin("multiplatform") version "1.7.0-Beta"
 }
 
 group = "io.github.vinccool96.observable"
