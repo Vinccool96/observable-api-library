@@ -175,13 +175,13 @@ expect abstract class ObservableListBase<E>() : AbstractMutableList<E>, Observab
 
     override fun removeListener(listener: InvalidationListener)
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean
+    override fun hasListener(listener: InvalidationListener): Boolean
 
     override fun addListener(listener: ListChangeListener<in E>)
 
     override fun removeListener(listener: ListChangeListener<in E>)
 
-    override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean
+    override fun hasListener(listener: ListChangeListener<in E>): Boolean
 
     internal fun fireChanges(change: Change<out E>)
 

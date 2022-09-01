@@ -21,7 +21,7 @@ internal class ByteConstant private constructor(override val value: Byte) : Obse
         // no-op
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         // no-op
         return false
     }
@@ -34,7 +34,7 @@ internal class ByteConstant private constructor(override val value: Byte) : Obse
         // no-op
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Number?>): Boolean {
+    override fun hasListener(listener: ChangeListener<in Number?>): Boolean {
         // no-op
         return false
     }

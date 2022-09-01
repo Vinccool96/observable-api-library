@@ -303,7 +303,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -313,7 +313,7 @@ object ObservableCollections {
         override fun removeListener(listener: ListChangeListener<in E>) {
         }
 
-        override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean {
+        override fun hasListener(listener: ListChangeListener<in E>): Boolean {
             return false
         }
 
@@ -408,7 +408,7 @@ object ObservableCollections {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -418,7 +418,7 @@ object ObservableCollections {
         override fun removeListener(listener: ListChangeListener<in E>) {
         }
 
-        override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean {
+        override fun hasListener(listener: ListChangeListener<in E>): Boolean {
             return false
         }
 

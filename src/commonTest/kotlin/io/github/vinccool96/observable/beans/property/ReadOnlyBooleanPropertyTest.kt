@@ -71,7 +71,7 @@ class ReadOnlyBooleanPropertyTest {
         override fun removeListener(listener: InvalidationListener) {
         }
 
-        override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+        override fun hasListener(listener: InvalidationListener): Boolean {
             return false
         }
 
@@ -81,7 +81,7 @@ class ReadOnlyBooleanPropertyTest {
         override fun removeListener(listener: ChangeListener<in Boolean?>) {
         }
 
-        override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in Boolean?>): Boolean {
+        override fun hasListener(listener: ChangeListener<in Boolean?>): Boolean {
             return false
         }
 

@@ -18,7 +18,7 @@ internal class ObjectConstant<T> private constructor(override val value: T) : Ob
         // no-op
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         // no-op
         return false
     }
@@ -31,7 +31,7 @@ internal class ObjectConstant<T> private constructor(override val value: T) : Ob
         // no-op
     }
 
-    override fun isChangeListenerAlreadyAdded(listener: ChangeListener<in T>): Boolean {
+    override fun hasListener(listener: ChangeListener<in T>): Boolean {
         // no-op
         return false
     }

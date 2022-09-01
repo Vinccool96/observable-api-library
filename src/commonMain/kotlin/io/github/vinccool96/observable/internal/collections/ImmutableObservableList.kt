@@ -21,7 +21,7 @@ internal class ImmutableObservableList<E>(vararg elements: E) : AbstractMutableL
         // no-op
     }
 
-    override fun isInvalidationListenerAlreadyAdded(listener: InvalidationListener): Boolean {
+    override fun hasListener(listener: InvalidationListener): Boolean {
         // no-op
         return false
     }
@@ -34,7 +34,7 @@ internal class ImmutableObservableList<E>(vararg elements: E) : AbstractMutableL
         // no-op
     }
 
-    override fun isListChangeListenerAlreadyAdded(listener: ListChangeListener<in E>): Boolean {
+    override fun hasListener(listener: ListChangeListener<in E>): Boolean {
         // no-op
         return false
     }
