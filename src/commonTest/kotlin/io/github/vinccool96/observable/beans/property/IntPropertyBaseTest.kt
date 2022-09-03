@@ -6,7 +6,6 @@ import io.github.vinccool96.observable.beans.value.ObservableIntValueStub
 import io.github.vinccool96.observable.beans.value.ObservableObjectValueStub
 import kotlin.test.*
 
-@Suppress("BooleanLiteralArgument")
 class IntPropertyBaseTest {
 
     private lateinit var property: IntPropertyMock
