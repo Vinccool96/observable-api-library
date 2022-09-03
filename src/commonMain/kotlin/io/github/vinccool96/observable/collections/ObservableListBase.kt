@@ -216,4 +216,8 @@ expect abstract class ObservableListBase<E>() : AbstractMutableList<E>, Observab
 
     protected open fun removeTheRange(fromIndex: Int, toIndex: Int)
 
+    override fun equals(other: Any?): Boolean
+
+    internal fun orderedEquals(c: Collection<*>, other: Collection<*>): Boolean
+
 }

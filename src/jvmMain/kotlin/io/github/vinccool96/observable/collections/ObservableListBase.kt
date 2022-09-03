@@ -286,4 +286,30 @@ actual abstract class ObservableListBase<E> : AbstractMutableList<E>(), Observab
         super.removeRange(fromIndex, toIndex)
     }
 
+    actual override fun equals(other: Any?): Boolean {
+        if (other === this) {
+            return true
+        }
+        if (other !is List<*>) {
+            return false
+        }
+
+        return orderedEquals(this, other)
+    }
+
+    internal actual fun orderedEquals(c: Collection<*>, other: Collection<*>): Boolean {
+        if (c.size != other.size) {
+            return false
+        }
+
+        val otherIterator = other.iterator()
+        for (elem in c) {
+            val elemOther = otherIterator.next()
+            if (elem != elemOther) {
+                return false
+            }
+        }
+        return true
+    }
+
 }

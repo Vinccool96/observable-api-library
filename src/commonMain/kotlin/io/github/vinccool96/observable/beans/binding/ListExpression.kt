@@ -244,6 +244,10 @@ abstract class ListExpression<E> : ObservableListValue<E> {
         (this.get() ?: EMPTY_LIST).remove(from, to)
     }
 
+    override fun equals(other: Any?): Boolean {
+        return (this.get() ?: EMPTY_LIST) == other
+    }
+
     companion object {
 
         /**
