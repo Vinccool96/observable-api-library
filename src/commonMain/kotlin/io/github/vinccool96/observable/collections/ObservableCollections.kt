@@ -24,6 +24,9 @@ import io.github.vinccool96.observable.internal.collections.SourceAdapterListCha
  */
 object ObservableCollections {
 
+    // Iterator
+    // =================================================================================================================
+
     private fun <E> singletonIterator(e: E): MutableIterator<E> {
         return object : MutableIterator<E> {
 
@@ -47,6 +50,9 @@ object ObservableCollections {
 
         }
     }
+
+    // List
+    // =================================================================================================================
 
     /**
      * Constructs an ObservableList that is backed by the specified list. Mutation operations on the ObservableList
@@ -86,40 +92,6 @@ object ObservableCollections {
             ObservableListWrapper(list, extractor)
         } else {
             ObservableSequentialListWrapper(list, extractor)
-        }
-    }
-
-    /**
-     * Sorts the provided observable list. Fires only **one** change notification on the list.
-     *
-     * @param T the list element type
-     * @param list the list to be sorted
-     */
-    fun <T : Comparable<T>> sort(list: ObservableList<T>) {
-        if (list is SortableList<*>) {
-            list.sort()
-        } else {
-            val newContent: MutableList<T> = ArrayList(list)
-            newContent.sort()
-            list.setAll(newContent)
-        }
-    }
-
-    /**
-     * Sorts the provided observable list using the c comparator. Fires only **one** change notification on the list.
-     *
-     * @param T the list element type
-     * @param list the list to sort
-     * @param c comparator used for sorting. Null if natural ordering is required.
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <T> sort(list: ObservableList<T>, c: Comparator<in T>) {
-        if (list is SortableList<*>) {
-            (list as SortableList<T>).sortWith(c)
-        } else {
-            val newContent: MutableList<T> = ArrayList(list)
-            newContent.sortWith(c)
-            list.setAll(newContent)
         }
     }
 
@@ -496,6 +468,40 @@ object ObservableCollections {
             throw UnsupportedOperationException()
         }
 
+    }
+
+    /**
+     * Sorts the provided observable list. Fires only **one** change notification on the list.
+     *
+     * @param T the list element type
+     * @param list the list to be sorted
+     */
+    fun <T : Comparable<T>> sort(list: ObservableList<T>) {
+        if (list is SortableList<*>) {
+            list.sort()
+        } else {
+            val newContent: MutableList<T> = ArrayList(list)
+            newContent.sort()
+            list.setAll(newContent)
+        }
+    }
+
+    /**
+     * Sorts the provided observable list using the c comparator. Fires only **one** change notification on the list.
+     *
+     * @param T the list element type
+     * @param list the list to sort
+     * @param c comparator used for sorting. Null if natural ordering is required.
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <T> sort(list: ObservableList<T>, c: Comparator<in T>) {
+        if (list is SortableList<*>) {
+            (list as SortableList<T>).sortWith(c)
+        } else {
+            val newContent: MutableList<T> = ArrayList(list)
+            newContent.sortWith(c)
+            list.setAll(newContent)
+        }
     }
 
 }
