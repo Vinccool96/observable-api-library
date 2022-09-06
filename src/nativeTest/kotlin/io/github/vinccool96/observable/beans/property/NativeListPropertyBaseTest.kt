@@ -4,38 +4,46 @@ import io.github.vinccool96.observable.beans.InvalidationListenerMock
 import io.github.vinccool96.observable.beans.value.ObservableListValueStub
 import io.github.vinccool96.observable.collections.ObservableCollections
 import io.github.vinccool96.observable.collections.ObservableList
+import kotlin.native.internal.GC
 import kotlin.test.*
 
-class JVMListPropertyBaseTest {
+class NativeListPropertyBaseTest {
+
+    private val v = ObservableListValueStub(VALUE_1)
+
+    private val publicListener = InvalidationListenerMock()
+
+    private val privateListener = InvalidationListenerMock()
 
     @Test
-    @Suppress("UNUSED_VALUE")
     fun testBindNull() {
+        initProp()
+        GC.collect()
+        this.publicListener.reset()
+        this.privateListener.reset()
+        this.v.set(VALUE_2b)
+        this.v.get()
+        this.publicListener.check(null, 0)
+        this.privateListener.check(v, 1)
+    }
+
+    @Suppress("UNUSED_VALUE")
+    private fun initProp() {
         var property: ListPropertyMock? = ListPropertyMock()
-        val v = ObservableListValueStub(VALUE_1)
-        val publicListener = InvalidationListenerMock()
-        val privateListener = InvalidationListenerMock()
-        property!!.addListener(publicListener)
-        v.addListener(privateListener)
-        property.bind(v)
+        property!!.addListener(this.publicListener)
+        this.v.addListener(this.privateListener)
+        property.bind(this.v)
         assertEquals(VALUE_1, property.get())
         assertTrue(property.bound)
         property.reset()
-        publicListener.reset()
-        privateListener.reset()
+        this.publicListener.reset()
+        this.privateListener.reset()
 
         // GC-ed call
         property = null
-        v.set(VALUE_2a)
-        publicListener.reset()
-        privateListener.reset()
-        System.gc()
-        publicListener.reset()
-        privateListener.reset()
-        v.set(VALUE_2b)
-        v.get()
-        publicListener.check(null, 0)
-        privateListener.check(v, 1)
+        this.v.set(VALUE_2a)
+        this.publicListener.reset()
+        this.privateListener.reset()
     }
 
     private class ListPropertyMock : ListPropertyBase<Any>() {
