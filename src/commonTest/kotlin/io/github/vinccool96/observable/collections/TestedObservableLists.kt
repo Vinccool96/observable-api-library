@@ -2,7 +2,7 @@ package io.github.vinccool96.observable.collections
 
 import io.github.vinccool96.observable.beans.property.SimpleListProperty
 import io.github.vinccool96.observable.dev.Callable
-import io.github.vinccool96.observable.test.LinkedList
+import io.github.vinccool96.observable.internal.utils.LinkedList
 
 object TestedObservableLists {
 

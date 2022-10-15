@@ -1,7 +1,7 @@
 package io.github.vinccool96.observable.collections
 
 import io.github.vinccool96.observable.collections.ListChangeListener.Change
-import io.github.vinccool96.observable.test.LinkedList
+import io.github.vinccool96.observable.internal.utils.LinkedList
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertSame

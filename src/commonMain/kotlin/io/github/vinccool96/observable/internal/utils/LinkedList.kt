@@ -1,4 +1,4 @@
-package io.github.vinccool96.observable.test
+package io.github.vinccool96.observable.internal.utils
 
 class LinkedList<E> : AbstractMutableList<E>(), MutableList<E> {
 
