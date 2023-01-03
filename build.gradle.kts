@@ -1,13 +1,14 @@
 val kotlinVersion = "1.7.20"
 
 plugins {
-    kotlin("multiplatform") version "1.7.20"
+    kotlin("multiplatform") version "1.8.0"
 }
 
 group = "io.github.vinccool96.observable"
 version = "1.0-SNAPSHOT"
 
 repositories {
+    google()
     mavenCentral()
 }
 
@@ -24,7 +25,9 @@ kotlin {
     js(BOTH) {
         browser {
             commonWebpackConfig {
-                cssSupport.enabled = true
+                cssSupport {
+                    enabled.set(true)
+                }
             }
         }
     }
