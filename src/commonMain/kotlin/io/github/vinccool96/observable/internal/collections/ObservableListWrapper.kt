@@ -7,7 +7,6 @@ import io.github.vinccool96.observable.collections.ObservableList
 import io.github.vinccool96.observable.dev.Callback
 import io.github.vinccool96.observable.internal.collections.NonIterableListChange.SimplePermutationChange
 import io.github.vinccool96.observable.internal.utils.BitVector
-import io.github.vinccool96.observable.internal.utils.empty
 
 internal open class ObservableListWrapper<E>(list: MutableList<E>) : ModifiableObservableListBase<E>(),
         ObservableList<E>, SortableList<E>, RandomAccess {
